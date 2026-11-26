@@ -283,6 +283,23 @@ h1, h2, .status-filter > span, .column-label, .order-value {
   position: relative;
 }
 
+.orders-footer {
+  position: absolute;
+  inset: calc(var(--list-bottom) + 16px) var(--panel-inset) auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.page-position {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.page-number { width: 44px; }
+.page-size { width: 87px; }
+
 .list-scroll-thumb {
   position: absolute;
   inset: 119px 0 auto auto;
