@@ -294,7 +294,7 @@ h1, h2, .status-filter > span, .column-label, .order-value {
 .page-position {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 
 .page-number { width: 44px; }
