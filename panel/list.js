@@ -1,8 +1,8 @@
 const orders = [
-  ['4081', 'Warehouse Picking', 'Bramble Film', 'Autumn Campaign', '25 Nov · 16:25', '26 Nov · 18:00'],
+  ['4081', 'Warehouse Picking', 'Bramble Film & Television', 'Autumn Campaign Behind the Scenes', '25 Nov · 16:25', '26 Nov · 18:00'],
   ['4080', 'Awaiting Payment', 'Harborline Studio', 'Winter Lookbook', '27 Nov · 09:00', '28 Nov · 17:30'],
   ['4079', 'Ready for Pickup', 'Juniper Works', 'Product Launch', '26 Nov · 08:30', '27 Nov · 19:00'],
-  ['4078', 'Draft', 'Morrow Pictures', 'Night Exterior', '30 Nov · 17:00', '2 Dec · 11:00'],
+  ['4078', 'Draft', 'Morrow Pictures International', 'Night Exterior at Central Station', '30 Nov · 17:00', '2 Dec · 11:00'],
   ['4077', 'On Rent', 'Lowfield Media', 'Behind the Scenes', '24 Nov · 07:30', '27 Nov · 18:30'],
   ['4076', 'Return Inspection', 'Copper Kite Films', 'Studio Interviews', '23 Nov · 10:00', '25 Nov · 16:00'],
   ['4075', 'Closed', 'Marshlight Studio', 'Café Portraits', '21 Nov · 09:00', '22 Nov · 15:00'],
@@ -34,3 +34,15 @@ for (const [index, order] of orders.entries()) {
   orderList.append(row);
 }
 document.querySelector('#order-title').textContent = '№ ' + orders[0][0];
+
+await document.fonts.ready;
+for (const value of orderList.querySelectorAll('.name-cell .order-value')) {
+  if (value.scrollWidth <= value.clientWidth) continue;
+  const fullName = value.textContent;
+  let shortened = fullName;
+  do {
+    shortened = shortened.slice(0, -1).trimEnd();
+    value.textContent = shortened + '..';
+  } while (shortened && value.scrollWidth > value.clientWidth);
+  value.closest('td').setAttribute('aria-label', fullName);
+}
