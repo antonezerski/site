@@ -1,16 +1,87 @@
-<!doctype html><html lang="en"><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rental Desk · 1920 × 1080 preview</title>
-<style>
-html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #ededed; }
-iframe { position: absolute; width: 1920px; height: 1080px; border: 0; background: white;
-  top: 50%; left: 50%; transform: translate(-50%, -50%) scale(var(--scale, 1)); }
-</style>
-<iframe title="Rental Desk at 1920 by 1080 CSS pixels" src="../desk/index.html"></iframe>
-<script>
-function fit() {
-  document.documentElement.style.setProperty('--scale', Math.min(1, innerWidth / 1920, innerHeight / 1080));
-}
-fit();
-addEventListener('resize', fit);
-</script></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Panel V2</title>
+  <link rel="preload" href="assets/tt-hoves-pro-vf-trial.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css?v=20261126-12">
+</head>
+<body>
+  <main class="panel">
+    <div class="rail" aria-hidden="true">
+      <div class="rail-top">
+        <span class="folder selected"></span>
+        <span class="folder"></span>
+        <span class="folder"></span>
+        <span class="folder"></span>
+      </div>
+      <span class="folder"></span>
+    </div>
+
+    <section class="orders" aria-labelledby="orders-title">
+      <header class="topbar">
+        <h1 id="orders-title">Orders</h1>
+        <span class="status-filter"><span>All</span><img src="assets/drafts-chevron.svg" width="8" height="7" alt=""></span>
+        <div class="header-icons" aria-hidden="true">
+          <img src="assets/add.svg" width="24" height="24" alt="">
+          <img src="assets/search.svg" width="24" height="24" alt="">
+        </div>
+      </header>
+      <table class="order-table" aria-labelledby="orders-title">
+        <colgroup>
+          <col class="selection-column">
+          <col class="number-column">
+          <col class="status-column">
+          <col class="name-column" span="2">
+          <col class="date-column" span="2">
+          <col>
+        </colgroup>
+        <thead>
+          <tr>
+            <th scope="col" aria-label="Selection"><span class="checkbox" aria-hidden="true"></span></th>
+            <th scope="col"><span class="column-heading"><span class="column-label">№</span><img src="assets/column-sort.svg" width="8" height="13" alt=""></span></th>
+            <th scope="col"><span class="column-heading"><span class="column-label">Status</span><img src="assets/column-sort.svg" width="8" height="13" alt=""></span></th>
+            <th scope="col"><span class="column-heading"><span class="column-label">Client</span><img src="assets/column-sort.svg" width="8" height="13" alt=""></span></th>
+            <th scope="col"><span class="column-heading"><span class="column-label">Project</span><img src="assets/column-sort.svg" width="8" height="13" alt=""></span></th>
+            <th scope="col"><span class="column-heading"><span class="column-label">Pickup</span><img src="assets/column-sort.svg" width="8" height="13" alt=""></span></th>
+            <th scope="col"><span class="column-heading"><span class="column-label">Return</span><img src="assets/column-sort.svg" width="8" height="13" alt=""></span></th>
+            <th scope="col" aria-label="Download"></th>
+          </tr>
+        </thead>
+        <tbody id="orders-list"></tbody>
+      </table>
+      <span class="list-scroll-thumb" aria-hidden="true"></span>
+      <template id="order-row">
+        <tr>
+          <td aria-label="Unselected"><span class="checkbox" aria-hidden="true"></span></td>
+          <td><span class="order-value"></span></td>
+          <td><span class="order-value"></span></td>
+          <td><span class="order-value"></span></td>
+          <td><span class="order-value"></span></td>
+          <td><span class="order-value"></span></td>
+          <td><span class="order-value"></span></td>
+          <td class="download-cell"><img src="assets/download.svg?v=20261126" width="24" height="24" alt="Download"></td>
+        </tr>
+      </template>
+    </section>
+
+    <section class="order" aria-labelledby="order-title">
+      <header class="topbar">
+        <h2 id="order-title"></h2>
+        <div class="header-icons" aria-hidden="true">
+          <img src="assets/close.svg" width="24" height="24" alt="">
+        </div>
+      </header>
+    </section>
+  </main>
+  <div class="panel-dividers" aria-hidden="true">
+    <span class="rail-divider"></span>
+    <span class="order-divider"></span>
+    <span class="topbar-divider"></span>
+    <span class="columns-divider"></span>
+    <span class="list-bottom-divider"></span>
+  </div>
+  <script type="module" src="list.js"></script>
+</body>
+</html>

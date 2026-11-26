@@ -3,91 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Film equipment rental workflow prototype">
-  <title>Rental desk · ERP prototype</title>
-  <link rel="preload" href="assets/fonts/tt-hoves-pro-vf-trial.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="styles.css">
-  <script type="module" src="app.js"></script>
+  <meta http-equiv="refresh" content="0; url=../panel/">
+  <title>Panel</title>
 </head>
 <body>
-  <dialog id="startup"><p role="alert"></p><button onclick="location.reload()">Reload</button><button id="recover" hidden>Back up original and recover valid orders</button></dialog>
-  <div class="shell">
-    <nav class="rail" aria-label="Main navigation">
-      <button class="rail-mark" data-action="open" aria-label="Orders" title="Orders"></button>
-      <span class="rail-mark" aria-hidden="true"></span><span class="rail-mark" aria-hidden="true"></span>
-      <span class="rail-mark" aria-hidden="true"></span><span class="rail-mark" aria-hidden="true"></span>
-      <button class="rail-mark rail-bottom" data-action="reset" aria-label="Reset demo" title="Reset demo"></button>
-    </nav>
-    <main class="workspace" id="workspace">
-      <section class="registry" id="registry" aria-label="Orders">
-        <header>
-          <h1>Orders</h1>
-          <span class="select-chevron"><select id="status-filter" aria-label="Filter orders"><option>All</option><option>Draft</option><option>Awaiting Payment</option><option>Warehouse Picking</option><option>Archive</option></select></span>
-          <button class="push" data-action="search">Search</button><button data-action="create">Add</button>
-        </header>
-        <div class="search" id="order-search-wrap" hidden><input id="order-search" aria-label="Search orders" placeholder="Search project, client or order number"></div>
-        <div class="table-scroll"><table><thead><tr><th class="selection-cell"><input type="checkbox" id="select-orders" aria-label="Select visible orders"></th><th>No.</th><th>Status</th><th>Project</th><th>Manager</th><th class="numeric">Amount</th><th class="rental-dates-heading">Dates</th><th class="expanded-order-column">Return</th><th class="wide-extra">Client</th><th class="wide-extra">Shifts</th><th class="wide-extra">Discount</th><th class="wide-extra">Hold remaining</th><th class="row-actions-heading" aria-label="Download order"></th></tr></thead><tbody id="order-rows"></tbody></table></div>
-        <footer><span id="order-count"></span></footer>
-      </section>
-      <section class="batch-editor" id="batch-editor" aria-label="Batch edit orders" hidden>
-        <header><h2 id="batch-title"></h2><button class="push" data-batch="clear">Clear selection</button></header>
-        <div class="editor-scroll batch-content">
-          <details><summary>Review selected orders</summary><div id="batch-orders"></div></details>
-          <label class="batch-enable"><input type="checkbox" id="batch-manager-enabled">Change manager</label>
-          <label>Manager<input id="batch-manager" disabled placeholder="Mixed values"></label><small>Leave blank to clear the manager assignment.</small>
-          <label class="batch-enable"><input type="checkbox" id="batch-discount-enabled">Change discount</label>
-          <label>Discount %<input id="batch-discount" type="number" min="0" max="100" disabled></label>
-          <p id="batch-discount-note"></p><button data-batch="drafts" id="batch-drafts">Select drafts only</button>
-          <button data-batch="active" id="batch-active" hidden>Remove archived orders from selection</button><h3>Changes preview</h3><div id="batch-preview">Enable a field to preview changes.</div>
-          <p id="batch-error" role="alert"></p>
-        </div>
-        <footer><button data-batch="clear">Cancel</button><button class="primary" id="batch-apply" data-batch="apply" disabled>Apply changes</button></footer>
-      </section>
-      <section class="editor" id="editor" aria-label="Order editor">
-        <header><h2 id="order-number"></h2><span class="select-chevron order-status-control"><select id="order-status" aria-label="Order status"><option>Draft</option><option>Awaiting Payment</option><option>Warehouse Picking</option></select></span><span class="timer" id="timer" aria-label="Reservation time remaining" hidden></span><span class="sync" id="sync" role="status">Loading…</span><button class="push chevron-control" data-action="download">Download<span class="chevron" aria-hidden="true"></span></button><button id="archive-order" data-action="archive-order">Archive</button><button data-action="close-editor">Close</button></header>
-        <div class="editor-scroll">
-          <p id="overdue" role="status" hidden>Return overdue. Outstanding units remain unavailable until inspected.</p><p class="notice" id="order-note" hidden></p>
-          <fieldset class="details" id="order-fields">
-            <label>Client<input id="client" data-field="client"></label>
-            <label>Project name<input id="project" data-field="project"></label>
-            <label>Manager<input id="manager" data-field="manager" placeholder="Assign a manager"></label>
-            <label>Pickup and return<span class="date-pair"><input id="pickup" aria-label="Pickup" type="text" readonly data-action="pick-date" data-id="pickup" data-field="pickup" aria-haspopup="dialog"><input id="returns" aria-label="Return" type="text" readonly data-action="pick-date" data-id="returns" data-field="returns" aria-haspopup="dialog"></span></label>
-          </fieldset>
-          <details class="pricing" id="pricing"><summary id="pricing-description"></summary>
-            <fieldset class="pricing-fields" id="pricing-fields">
-              <label>Billable shifts<input id="shifts" type="number" min="0" step="0.5" data-field="shiftsOverride" aria-describedby="calculated-shifts"><small id="calculated-shifts"></small></label>
-              <label>Security deposit (RUB)<input id="deposit" type="number" min="0" step="1" data-field="deposit"></label><label>Discount %<input id="discount" type="number" min="0" max="100" data-field="discount"></label>
-              <label class="full" id="reason-wrap" hidden>Adjustment reason<input id="reason" data-field="overrideReason"><button type="button" data-action="calculated">Use calculated shifts</button><button id="keep-shifts" data-action="keep-shifts" hidden>Keep adjusted shifts for these dates</button></label>
-            </fieldset>
-          </details>
-          <div class="section-heading"><h3>Equipment <span class="muted" id="equipment-count"></span></h3><button id="parser-open" data-action="parser">Parser</button><button id="catalog-open" data-action="catalog">Search</button></div>
-          <div class="warning" id="conflicts" hidden><strong id="conflict-count"></strong><p>Choose alternatives or adjust the rental dates.</p><button id="suggest" data-action="suggest">Suggest accessory alternatives</button></div>
-          <div class="table-scroll"><table class="equipment"><thead><tr><th>Availability</th><th>Name</th><th>Quantity</th><th class="numeric">Per shift</th><th class="numeric">Total</th><th aria-label="Equipment actions"></th></tr></thead><tbody id="equipment-rows"></tbody></table><p class="empty" id="empty-equipment" hidden>Add equipment to start calculating your quote.</p></div>
-          <p class="error" id="validation-error" hidden></p><p class="notice" id="message" role="status" hidden></p>
-          <button id="amend" data-action="amend" hidden>Amend booking</button><button id="view-quote" data-action="view-quote" hidden>View issued quote</button>
-          <button id="retry-save" data-action="retry" hidden>Retry save</button><div class="workflow" id="workflow" hidden></div><details id="history" hidden><summary>Order history</summary><div id="events"></div></details>
-        </div>
-        <footer class="summary"><span>Total</span><button class="pricing-toggle" id="pricing-toggle" data-action="pricing"></button><strong id="total"></strong><button class="primary" id="reserve" data-action="reserve">Send quote &amp; reserve · 24h</button></footer>
-      </section>
-    </main>
-  </div>
-  <dialog id="amend-dialog" class="dialog" aria-labelledby="amend-title"><header><h2 id="amend-title">Amend booking</h2><button data-action="close-dialog">Cancel</button></header>
-    <label>Pickup <input id="amend-pickup" readonly data-action="pick-date" data-id="pickup"></label>
-    <label>Return <input id="amend-returns" readonly data-action="pick-date" data-id="returns"></label>
-    <div id="amend-equipment"></div><label>Discount %<input id="amend-discount" type="number" min="0" max="100"></label>
-    <label>Deposit (RUB)<input id="amend-deposit" type="number" min="0"></label>
-    <label>Adjusted shifts (blank for calculated)<input id="amend-shifts" type="number" min="0" step="0.5"></label>
-    <label>Adjustment reason<input id="amend-reason"></label><p id="amend-error" role="alert"></p><button data-action="amend-apply">Review and confirm</button></dialog>
-  <dialog id="quote-dialog" class="dialog"><header><h2>Issued quote</h2><button data-action="close-dialog">Close</button></header><label>Quote version <select id="quote-version"></select></label><pre id="quote-body"></pre><a id="client-quote" target="_blank" rel="noopener" hidden>Open client copy</a><button data-action="print-quote">Print quote</button><button data-action="approve-quote" id="approve-quote">Simulate client approval</button></dialog>
-  <dialog id="catalog-dialog" class="dialog"><header><h2>Equipment catalog</h2><button data-action="close-dialog">Close</button></header><input id="catalog-search" aria-label="Search equipment" placeholder="Search equipment"><div id="catalog-items"></div></dialog>
-  <dialog id="parser-dialog" class="dialog"><header><h2>Parse equipment request</h2><button data-action="close-dialog">Close</button></header><p>Enter one item per line. Add a quantity such as “2 x Sony FX6”. Review the matches before adding.</p><textarea id="request" aria-label="Equipment request" rows="5" placeholder="Sony FX6&#10;V-mount battery 130Wh"></textarea><div id="parse-preview"></div><button data-action="parse">Confirm and add recognized items</button></dialog>
-  <dialog id="calendar" class="calendar-overlay" aria-labelledby="calendar-title"><section class="dialog calendar-popover" aria-label="Equipment availability"><header><h2 id="calendar-title"></h2><button data-action="close-calendar">Close</button></header><div class="month-heading"><strong id="calendar-month"></strong><span class="month-actions"><button data-action="previous-month" aria-label="Previous month"><span class="chevron chevron-left" aria-hidden="true"></span></button><button data-action="next-month" aria-label="Next month"><span class="chevron chevron-right" aria-hidden="true"></span></button></span></div><div class="calendar-grid" id="calendar-days"></div><small class="calendar-legend">Choose a date to inspect available and requested quantities.</small><p id="day-summary" role="status"></p><p id="calendar-summary"></p><div id="calendar-bookings"></div></section></dialog>
-  <dialog id="date-dialog" class="dialog" aria-labelledby="date-picker-title">
-    <header><h2 id="date-picker-title">Select date and time</h2><button data-action="close-dialog">Close</button></header>
-    <div class="month-heading"><strong id="date-month"></strong><span class="month-actions"><button data-action="date-prev" aria-label="Previous month"><span class="chevron chevron-left" aria-hidden="true"></span></button><button data-action="date-next" aria-label="Next month"><span class="chevron chevron-right" aria-hidden="true"></span></button></span></div>
-    <div id="date-days" class="date-picker-grid"></div>
-    <div class="date-picker-footer"><label>Hour <input id="date-hour" type="number" min="0" max="23" step="1" value="18"></label><label>Minute <input id="date-minute" type="number" min="0" max="59" step="1" value="0"></label><button class="primary" data-action="date-apply">Apply</button></div>
-    <p id="date-error" class="error" role="alert" hidden></p>
-  </dialog>
+  <p><a href="../panel/">Open Panel</a></p>
 </body>
 </html>

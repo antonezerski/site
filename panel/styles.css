@@ -1,0 +1,293 @@
+@font-face {
+  font-family: "TT Hoves";
+  src: url("assets/tt-hoves-pro-vf-trial.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+:root {
+  --font-size-ui: 16px;
+  --divider: #f2f4f7;
+  --canvas-fill: #ffffff;
+  --control-fill: #f3f4f6;
+  --selected-row-fill: #f4f5f6;
+  --ink: #16181d;
+  --muted-ink: #16181d66;
+  --draft-ink: #2873aa;
+  --frame-width: 1920px;
+  --frame-height: 1080px;
+  --frame-scale: min(1, 100dvw / var(--frame-width), 100dvh / var(--frame-height));
+  --rail-width: 60px;
+  --registry-width: 1066px;
+  --topbar-height: 57px;
+  --columns-height: 52px;
+  --list-bottom: 1028px;
+  --panel-inset: 20px;
+  --table-inset: 24px;
+  --column-gap: 32px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background: var(--divider);
+  color: var(--ink);
+  font: 430 var(--font-size-ui)/20px "TT Hoves", sans-serif;
+  font-variation-settings: "wdth" 100, "slnt" 0;
+  text-rendering: geometricPrecision;
+}
+
+.panel {
+  position: fixed;
+  inset: 50% auto auto 50%;
+  display: grid;
+  grid-template-columns: var(--rail-width) var(--registry-width) 1fr;
+  width: var(--frame-width);
+  height: var(--frame-height);
+  background: var(--canvas-fill);
+  translate: -50% -50%;
+  scale: var(--frame-scale);
+}
+
+/* Keep the rules one pixel thick on the browser's pixel grid. */
+.panel-dividers {
+  --scaled-width: calc(var(--frame-width) * var(--frame-scale));
+  --scaled-height: calc(var(--frame-height) * var(--frame-scale));
+  --rail-edge: round(nearest, var(--rail-width) * var(--frame-scale), 1px);
+  --order-edge: round(nearest, (var(--rail-width) + var(--registry-width)) * var(--frame-scale), 1px);
+  position: fixed;
+  left: round(nearest, 50dvw - var(--scaled-width) / 2, 1px);
+  top: round(nearest, 50dvh - var(--scaled-height) / 2, 1px);
+  width: round(nearest, var(--scaled-width), 1px);
+  height: round(nearest, var(--scaled-height), 1px);
+  pointer-events: none;
+}
+
+.panel-dividers span {
+  position: absolute;
+  background: var(--divider);
+}
+
+.rail-divider, .order-divider {
+  inset-block: 0;
+  width: 1px;
+}
+
+.rail-divider { left: var(--rail-edge); }
+.order-divider { left: var(--order-edge); }
+
+.topbar-divider, .columns-divider, .list-bottom-divider {
+  left: var(--rail-edge);
+  height: 1px;
+}
+
+.topbar-divider {
+  top: round(nearest, var(--topbar-height) * var(--frame-scale), 1px);
+  right: 0;
+}
+
+.columns-divider {
+  top: round(nearest, (var(--topbar-height) + var(--columns-height)) * var(--frame-scale), 1px);
+  width: calc(var(--order-edge) - var(--rail-edge));
+}
+
+.list-bottom-divider {
+  top: round(nearest, var(--list-bottom) * var(--frame-scale), 1px);
+  width: calc(var(--order-edge) - var(--rail-edge));
+}
+
+.rail, .rail-top {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rail {
+  justify-content: space-between;
+  align-items: center;
+  padding-block: 10px;
+}
+
+.folder {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  background: url("assets/folder.svg") center no-repeat;
+}
+
+.folder.selected {
+  background-color: var(--control-fill);
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  padding-inline: var(--panel-inset);
+  height: var(--topbar-height);
+  gap: 24px;
+}
+
+.topbar h1 {
+  width: 62px;
+}
+
+.header-icons {
+  display: flex;
+  gap: 12px;
+  margin-inline-start: auto;
+  translate: 0 0.5px;
+}
+
+h1, h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 480;
+  line-height: 25px;
+}
+
+h1, h2, .status-filter > span, .column-label, .order-value {
+  /* Match the Figma text baseline with the browser's font metrics. */
+  transform: translateY(2px);
+}
+
+.status-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--draft-ink);
+  translate: 0 1px;
+}
+
+.status-filter img {
+  translate: -0.65px 1px;
+}
+
+.order-table {
+  table-layout: fixed;
+  border-collapse: collapse;
+  width: calc(100% - 2 * var(--table-inset));
+  margin-inline: var(--table-inset);
+}
+
+.selection-column { width: calc(20px + var(--column-gap)); }
+.number-column { width: calc(42px + var(--column-gap)); }
+.status-column { width: calc(138px + var(--column-gap)); }
+.name-column { width: calc(160px + var(--column-gap)); }
+.date-column { width: calc(112px + var(--column-gap)); }
+
+.order-table th, .order-table td {
+  padding: 0;
+  text-align: left;
+  font-weight: inherit;
+  white-space: nowrap;
+}
+
+.order-table thead tr {
+  height: var(--columns-height);
+  color: var(--muted-ink);
+}
+
+.order-table tbody::before {
+  content: "";
+  display: table-row;
+  height: 7.5px;
+}
+
+.order-table tbody tr {
+  height: 53px;
+}
+
+.selected-order {
+  position: relative;
+  isolation: isolate;
+}
+
+.selected-order td:first-child {
+  position: relative;
+}
+
+.selected-order td:first-child::before {
+  content: "";
+  position: absolute;
+  inset: 2.5px auto 1.5px -14px;
+  width: calc(var(--registry-width) - 20px);
+  z-index: -1;
+  border-radius: 4px;
+  background: var(--selected-row-fill);
+}
+
+.column-heading {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.column-heading img {
+  /* The export includes the chevron strokes outside the Figma layer bounds. */
+  translate: -0.65px 0.5px;
+}
+
+.column-heading .column-label { width: var(--label-width); }
+.order-table th:nth-child(2) { --label-width: 18px; }
+.order-table th:nth-child(3) { --label-width: 46px; }
+.order-table th:nth-child(4) { --label-width: 43px; }
+.order-table th:nth-child(5) { --label-width: 51px; }
+.order-table th:nth-child(6) { --label-width: 49px; }
+.order-table th:nth-child(7) { --label-width: 48px; }
+
+.order-value {
+  display: block;
+  margin-right: var(--column-gap);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.download-cell img {
+  display: block;
+  margin-left: auto;
+  visibility: hidden;
+}
+
+.selected-order .download-cell img {
+  visibility: visible;
+}
+
+.checkbox {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  background: var(--control-fill);
+}
+
+.selected-order .checkbox {
+  display: grid;
+  place-items: center;
+  background: var(--canvas-fill);
+}
+
+.selected-order .checkbox::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--draft-ink);
+}
+
+.orders {
+  position: relative;
+}
+
+.list-scroll-thumb {
+  position: absolute;
+  inset: 119px 0 auto auto;
+  width: 6px;
+  height: 140px;
+  border-radius: 40px 0 0 40px;
+  background: var(--control-fill);
+}
