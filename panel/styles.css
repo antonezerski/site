@@ -298,7 +298,17 @@ h1, h2, .status-filter > span, .column-label, .order-value {
 }
 
 .page-number { width: 44px; }
-.page-size { width: 87px; }
+
+.page-size {
+  display: grid;
+  grid-template-columns: 20px 6px;
+  align-items: center;
+  gap: 6px;
+}
+
+.page-size img {
+  translate: -0.65px 1px;
+}
 
 .list-scroll-thumb {
   position: absolute;
