@@ -265,18 +265,32 @@ h1, h2, .status-filter > span, .column-label, .order-value {
   background: var(--control-fill);
 }
 
-.selected-order .checkbox {
+.selected-order .checkbox,
+.checkbox.mixed {
   display: grid;
   place-items: center;
+}
+
+.selected-order .checkbox {
   background: var(--canvas-fill);
 }
 
-.selected-order .checkbox::before {
+.selected-order .checkbox::before,
+.checkbox.mixed::before {
   content: "";
+  background: var(--draft-ink);
+}
+
+.selected-order .checkbox::before {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--draft-ink);
+}
+
+.checkbox.mixed::before {
+  width: 9px;
+  height: 2px;
+  border-radius: 4px;
 }
 
 .orders {
