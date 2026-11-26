@@ -289,7 +289,7 @@ h1, h2, .status-filter > span, .column-label, .order-value {
 
 .checkbox.mixed::before {
   width: 9px;
-  height: 2px;
+  height: 3px;
   border-radius: 4px;
 }
 
