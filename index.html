@@ -25,15 +25,33 @@
       font: 430 16px / 20px "TT Hoves", sans-serif;
     }
 
+    main {
+      display: grid;
+      justify-items: center;
+      gap: 8px;
+      font-variation-settings: "slnt" 0;
+    }
+
     h1 {
       margin: 0;
       font: inherit;
       font-style: normal;
-      font-variation-settings: "slnt" 0;
+    }
+
+    main a {
+      color: #2873AA;
+      text-decoration: none;
+    }
+
+    main a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
-  <main><h1>Anton Ezerski</h1></main>
+  <main>
+    <h1>Anton Ezerski</h1>
+    <a href="/panel/">Panel</a>
+  </main>
 </body>
 </html>
