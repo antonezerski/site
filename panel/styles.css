@@ -229,7 +229,7 @@ h1, h2, .status-filter > span, .column-label, .order-value {
 
 .column-heading img {
   /* The export includes the chevron strokes outside the Figma layer bounds. */
-  translate: -0.65px 1.5px;
+  translate: -0.65px 0.5px;
 }
 
 .column-heading .column-label { width: var(--label-width); }
