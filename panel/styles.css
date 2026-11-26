@@ -299,6 +299,11 @@ h1, h2, .status-filter > span, .column-label, .order-value {
 
 .page-number { width: 44px; }
 
+.page-number,
+.page-size span {
+  translate: 0 1.5px;
+}
+
 .page-size {
   display: grid;
   grid-template-columns: 20px 6px;
@@ -307,7 +312,7 @@ h1, h2, .status-filter > span, .column-label, .order-value {
 }
 
 .page-size img {
-  translate: -0.65px 1px;
+  translate: -0.65px 0.5px;
 }
 
 .list-scroll-thumb {
